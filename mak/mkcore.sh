@@ -32,33 +32,31 @@ make_func()
          fi
 
     export SLIBS="`eval echo '$'{${target}_libs'}'`" 
-         export SINCLUDEPATH="`eval echo '$'{${target}_includepath'}'`"
+         export SINCLUDEPATH="`eval echo '$'{${target}_include_path'}'`"
 
          if [ "clean" = ${cmd} ]
          then
-            make -f ${PROROOT}/mak/mkcore.mak ${cmd} 
+            make -f ${MKHOME}/mkcore.mak ${cmd} 
          elif [ "all" = ${cmd} ]
          then
             cmd=debug${targetType}
-            make -f ${PROROOT}/mak/mkcore.mak ${cmd}
+            make -f ${MKHOME}/mkcore.mak ${cmd}
          else
             cmd=${cmd}${targetType}
-            make -f ${PROROOT}/mak/mkcore.mak ${cmd}
+            make -f ${MKHOME}/mkcore.mak ${cmd}
          fi
       done
       if [[ $cmd =~ "release" ]]; then
-         preFix=${PROROOT}/bin/
+         preFix=${PRONAME}/bin/
          if [ ${targetType} = "dynamic" ]; then
             suffix=".so"
-            preFix=${PROROOT}/lib/lib
+            preFix=${PRONAME}/lib/lib
          elif [ ${targetType} = "static" ]; then
             suffix=".a"
-            preFix=${PROROOT}/lib/lib
+            preFix=${PRONAME}/lib/lib
          fi
          strip ${preFix}${target}${suffix}
       fi
-      echo $cmd
-      echo ${cmds[$#-1]}
    done
 }
 
