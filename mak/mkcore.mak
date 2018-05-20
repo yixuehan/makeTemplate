@@ -1,13 +1,9 @@
 RM:=rm -f
 RMDIR:=rmdir
-CXXFLAG_O:=-O2 
-CXXFLAG_D:=-ggdb3 
 CXX:=g++ -std=c++1y -Wall
 #CC:=gcc -Wall 
 AR:=ar
 LD:=ld
-DFLAG:=$(MKHOME)/.tmp.mak
-DFLAG_DYNAMIC:=$(MKHOME)/.dltmp.mak
 SLFLAG:=-ruc
 DLFLAG_OBJ:=-fPIC 
 DLFLAG_TARGET:=-shared
@@ -64,21 +60,21 @@ DLTARGET:=$(LIBOUTPATH)/lib$(STARGET)$(DLFIX)
 #静态库
 SLTARGET:=$(LIBOUTPATH)/lib$(STARGET)$(SLFIX)
 
-debugexec: setdebug $(EXTTARGET) 
-debugstatic: setdebug $(SLTARGET)
-debugdynamic: setdebug setdynamic $(DLTARGET)
-releaseexec: setrelease $(EXTTARGET) 
-releasedynamic: setrelease setdynamic $(DLTARGET)
-releasestatic: setrelease $(SLTARGET)
+debugexec: $(EXTTARGET) 
+debugstatic: $(SLTARGET)
+debugdynamic: $(DLTARGET)
+releaseexec: $(EXTTARGET) 
+releasedynamic: $(DLTARGET)
+releasestatic: $(SLTARGET)
 debugjava:$(JAVATARGET)
 
 $(EXTTARGET):$(OBJS)
 	@echo "[$^ -> $@]"
-	$(CXX) $^ `cat $(DFLAG)` -o $@ $(LIBS) 
+	$(CXX) $^ $(CXXFLAGS) -o $@ $(LIBS) 
 
 $(DLTARGET):$(OBJS)
 	@echo "[$^ -> $@]"
-	$(CXX) $^ `cat $(DFLAG)` $(DLFLAG_TARGET) -o $@ 
+	$(CXX) $^ $(CXXFLAGS) $(DLFLAG_TARGET) -o $@ 
 
 #$(INCLUDEPATH)
 
@@ -90,15 +86,17 @@ $(SLTARGET):$(OBJS)
 .SUFFIXES: .c .cpp .pc .sqc .java .class .o
 
 # 隐式推断
+#$(CXX) -c $< $(DFLAG_OBJ) -o $@ $(INCLUDEPATH)
 
 $(OBJPATH)/%.o: %.cpp $(DEPENDPATH)/%.d
 	@echo "[$^ -> $@]"
-	$(CXX) -c $< `cat $(DFLAG)` `cat $(DFLAG_DYNAMIC)` -o $@ $(INCLUDEPATH)
+	$(CXX) -c $< $(CXXFLAGS) $(DFLAG_OBJ) -o $@ $(INCLUDEPATH)
+
 
 $(OBJPATH)/%.o: %.pc $(DEPENDPATH)/%.d
 	@echo "[$^ -> $@]"
 	$(PROC) iname=$<  oname=$(patsubst %.pc,%.cpp,$<) code=CPP mode=ANSI parse=NONE sqlcheck=FULL lines=YES
-	$(CXX) -c $(patsubst %.pc,%.cpp,$<) `cat $(DFLAG)` `cat $(DFLAG_DYNAMIC)` -o $@ $(INCLUDEPATH)
+	$(CXX) -c $(patsubst %.pc,%.cpp,$<) $(CXXFLAGS) $(DFLAG_OBJ) -o $@ $(INCLUDEPATH)
 	$(RM) $(patsubst %.pc,%.lis,$<) $(patsubst %.pc,%.cpp,$<)
 
 $(DEPENDPATH)/%.d:%.pc
@@ -129,8 +127,6 @@ clean:
 	$(RMDIR) $(OBJPATH) $(DEPENDPATH)
 
 setdebug:
-	@echo -n "$(CXXFLAG_D) " > $(DFLAG)
-	@echo -n "" > $(DFLAG_DYNAMIC)
 #@echo "OBJS:$(OBJS)"
 #@echo "TARGET:$(EXTTARGET)"
 #@echo "SLTARGET:$(SLTARGET)"
@@ -140,8 +136,5 @@ setdebug:
 #echo "$*"
 
 setrelease:
-	@echo -n "$(CXXFLAG_O) " > $(DFLAG)
-	@echo -n "" > $(DFLAG_DYNAMIC)
 
 setdynamic:
-	@echo -n "$(DLFLAG_OBJ) " > $(DFLAG_DYNAMIC)
