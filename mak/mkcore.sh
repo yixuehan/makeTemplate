@@ -40,13 +40,13 @@ make_func()
             if [ "clean" = ${cmd} ]
             then
                make -f ${MKHOME}/mkcore.mak ${cmd} 
-            elif [ "all" = ${cmd} ]
+            elif [ "release" = ${cmd} ]
             then
-                export CXXFLAGS=-ggdb3
+                export CXXFLAGS=-O3
                 cmd=debug${targetType}
                 make -f ${MKHOME}/mkcore.mak ${cmd}
             else
-                export CXXFLAGS=-O3
+                export CXXFLAGS=-ggdb3
                 cmd=${cmd}${targetType}
                 make -f ${MKHOME}/mkcore.mak ${cmd}
             fi
