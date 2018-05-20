@@ -43,11 +43,11 @@ make_func()
             elif [ "release" = ${cmd} ]
             then
                 export CXXFLAGS=-O3
-                cmd=debug${targetType}
+                cmd=${cmd}${targetType}
                 make -f ${MKHOME}/mkcore.mak ${cmd}
             else
                 export CXXFLAGS=-ggdb3
-                cmd=${cmd}${targetType}
+                cmd=debug${targetType}
                 make -f ${MKHOME}/mkcore.mak ${cmd}
             fi
         done
