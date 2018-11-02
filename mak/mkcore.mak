@@ -123,7 +123,6 @@ clean:
 	$(RM) $(DLTARGET) 
 	$(RM) $(OBJS)
 	$(RM) $(addprefix $(DEPENDPATH)/, $(patsubst %.o,%.d,$(SOBJS)))
-	$(RM) $(MKHOME)/.dltmp.mak $(MKHOME)/.tmp.mak
 	$(RMDIR) $(OBJPATH) $(DEPENDPATH)
 
 setdebug:
