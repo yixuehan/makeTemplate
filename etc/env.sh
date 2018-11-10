@@ -35,7 +35,7 @@ export PS1
 
 alias cds='cd $PRONAME/src'
 alias cdi='cd $PRONAME/include'
-alias cdm='cd $MKHOME/mak'
+alias cdm='cd $MKHOME'
 alias cde='cd $PRONAME/etc'
 alias cdl='cd $PRONAME/log'
 alias cdb='cd $PRONAME/bin'
