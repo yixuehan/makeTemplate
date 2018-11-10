@@ -17,6 +17,6 @@ xxx_include_path=
 
 #下面的代码不要修改!!!!!!!!!!!!!!!!!!!!!!!!
 
-#export MKHOME=${PRONAME}/mak
+export MKHOME=${PRONAME}/mak
 . ${MKHOME}/mkcore.sh
 
